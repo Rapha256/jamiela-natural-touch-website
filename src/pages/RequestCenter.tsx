@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const products = ["Hair Oil", "Growth Serum", "Herbal Hair Mist", "Hair Cream", "Body Cream"];
 
@@ -23,6 +24,23 @@ const RequestCenter = () => {
       return;
     }
     setSubmitting(true);
+
+    // Save to database
+    const { error } = await supabase.from("requests").insert({
+      product: form.product,
+      quantity: form.quantity,
+      full_name: form.fullName,
+      country: form.country,
+      phone: form.phone,
+      address: form.address,
+      notes: form.notes || null,
+    });
+
+    if (error) {
+      toast({ title: "Error submitting request", description: error.message, variant: "destructive" });
+      setSubmitting(false);
+      return;
+    }
 
     // Send WhatsApp notification
     const message = `New Order Request!\n\nProduct: ${form.product}\nQty: ${form.quantity}\nName: ${form.fullName}\nCountry: ${form.country}\nPhone: ${form.phone}\nAddress: ${form.address}\nNotes: ${form.notes || "N/A"}`;
