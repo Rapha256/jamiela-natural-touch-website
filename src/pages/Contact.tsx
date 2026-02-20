@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { MapPin, Phone, Mail } from "lucide-react";
 
 const Contact = () => {
@@ -7,7 +8,7 @@ const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) {
       toast({ title: "Please fill all fields", variant: "destructive" });
@@ -15,8 +16,17 @@ const Contact = () => {
     }
     setSubmitting(true);
 
-    const msg = `Contact Message:\n\nName: ${form.name}\nEmail: ${form.email}\nMessage: ${form.message}`;
-    window.open(`https://wa.me/2204129401?text=${encodeURIComponent(msg)}`, "_blank");
+    const { error } = await supabase.from("contact_messages").insert({
+      name: form.name,
+      email: form.email,
+      message: form.message,
+    });
+
+    if (error) {
+      toast({ title: "Error sending message", description: error.message, variant: "destructive" });
+      setSubmitting(false);
+      return;
+    }
 
     toast({ title: "Message sent!", description: "We'll get back to you soon." });
     setForm({ name: "", email: "", message: "" });
