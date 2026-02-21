@@ -15,7 +15,7 @@ const AdminLogin = () => {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
-      toast({ title: "Login failed", description: error.message, variant: "destructive" });
+      toast({ title: "Login failed", description: "Invalid credentials. Please try again.", variant: "destructive" });
     } else {
       navigate("/admin/dashboard");
     }
@@ -35,6 +35,7 @@ const AdminLogin = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              placeholder="admin@jamiela.com"
               required
             />
           </div>

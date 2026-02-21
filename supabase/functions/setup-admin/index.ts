@@ -17,25 +17,30 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, serviceRoleKey);
 
     const { secret } = await req.json();
-    if (secret !== 'setup-jamiela-admin-2024') {
+    if (secret !== 'setup-jamiela-admin-2026') {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
+    const adminEmail = 'admin@jamiela.com';
+    const adminPassword = 'Jamellah@2026Natural';
+
     // Check if admin already exists
     const { data: existingUsers } = await supabase.auth.admin.listUsers();
-    const adminExists = existingUsers?.users?.find((u: any) => u.email === 'jamilah@naturaltouch.com');
+    const adminExists = existingUsers?.users?.find((u: any) => u.email === adminEmail);
 
     let userId: string;
 
     if (adminExists) {
       userId = adminExists.id;
+      // Update password
+      await supabase.auth.admin.updateUserById(userId, { password: adminPassword });
     } else {
       const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
-        email: 'jamilah@naturaltouch.com',
-        password: 'admin123',
+        email: adminEmail,
+        password: adminPassword,
         email_confirm: true,
       });
 
@@ -51,7 +56,7 @@ serve(async (req) => {
 
     if (roleError) throw roleError;
 
-    return new Response(JSON.stringify({ success: true, message: 'Admin account ready' }), {
+    return new Response(JSON.stringify({ success: true, message: 'Admin account ready. Login: admin@jamiela.com' }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error: any) {
