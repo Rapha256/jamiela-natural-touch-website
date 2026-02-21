@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Package, MessageSquare, Star, Mail } from "lucide-react";
+import { LogOut, Package, MessageSquare, Star, Mail, LayoutDashboard } from "lucide-react";
+import ProductManager from "@/components/admin/ProductManager";
+import TestimonialManager from "@/components/admin/TestimonialManager";
 
 type TabType = "overview" | "products" | "requests" | "testimonials" | "messages";
 
@@ -22,11 +24,7 @@ const AdminDashboard = () => {
 
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      navigate("/admin");
-      return;
-    }
-    // Check admin role
+    if (!session) { navigate("/admin"); return; }
     const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", session.user.id);
     if (!roles || !roles.some((r: any) => r.role === "admin")) {
       toast({ title: "Access denied", description: "You don't have admin privileges.", variant: "destructive" });
@@ -68,19 +66,20 @@ const AdminDashboard = () => {
     const rows = requests.map((r: any) => [
       r.product, r.quantity, r.full_name, r.country, r.phone, r.address, r.notes || "", r.status, new Date(r.created_at).toLocaleDateString()
     ]);
-    const csv = [headers.join(","), ...rows.map((r: string[]) => r.map((v) => `"${v}"`).join(","))].join("\n");
+    const csv = [headers.join(","), ...rows.map((r: string[]) => r.map(v => `"${v}"`).join(","))].join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url;
+    a.href = URL.createObjectURL(blob);
     a.download = "requests.csv";
     a.click();
   };
 
   const pendingRequests = requests.filter((r: any) => r.status === "Pending").length;
+  const approvedRequests = requests.filter((r: any) => r.status === "Approved").length;
+  const completedRequests = requests.filter((r: any) => r.status === "Completed").length;
 
   const tabs: { id: TabType; label: string; icon: any }[] = [
-    { id: "overview", label: "Overview", icon: Package },
+    { id: "overview", label: "Overview", icon: LayoutDashboard },
     { id: "products", label: "Products", icon: Package },
     { id: "requests", label: "Requests", icon: MessageSquare },
     { id: "testimonials", label: "Testimonials", icon: Star },
@@ -98,37 +97,35 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-secondary">
       <div className="bg-card border-b border-border px-4 py-3 flex items-center justify-between">
-        <h1 className="font-heading text-lg font-bold">Admin Dashboard</h1>
+        <h1 className="font-heading text-lg font-bold">JAMIELA Admin</h1>
         <button onClick={handleSignOut} className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-sm">
           <LogOut size={16} /> Sign Out
         </button>
       </div>
 
       <div className="container mx-auto px-4 py-6">
-        {/* Tabs */}
         <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-          {tabs.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
+          {tabs.map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                 tab === t.id ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:bg-muted"
-              }`}
-            >
+              }`}>
               <t.icon size={16} /> {t.label}
             </button>
           ))}
         </div>
 
-        {/* Overview */}
         {tab === "overview" && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { label: "Products", value: products.length, color: "text-primary" },
               { label: "Total Requests", value: requests.length, color: "text-foreground" },
-              { label: "Pending Requests", value: pendingRequests, color: "text-accent" },
+              { label: "Pending", value: pendingRequests, color: "text-accent" },
+              { label: "Approved", value: approvedRequests, color: "text-primary" },
+              { label: "Completed", value: completedRequests, color: "text-muted-foreground" },
               { label: "Testimonials", value: testimonials.length, color: "text-gold" },
-            ].map((s) => (
+              { label: "Messages", value: messages.length, color: "text-foreground" },
+            ].map(s => (
               <div key={s.label} className="bg-card rounded-xl p-6 shadow-botanical">
                 <p className="text-sm text-muted-foreground">{s.label}</p>
                 <p className={`text-3xl font-heading font-bold mt-1 ${s.color}`}>{s.value}</p>
@@ -137,42 +134,8 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* Products */}
-        {tab === "products" && (
-          <div className="bg-card rounded-xl shadow-botanical overflow-hidden">
-            <div className="p-4 border-b border-border">
-              <h2 className="font-heading text-lg font-semibold">Products</h2>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-muted">
-                  <tr>
-                    <th className="text-left p-3 font-medium">Name</th>
-                    <th className="text-left p-3 font-medium">Category</th>
-                    <th className="text-left p-3 font-medium">Price</th>
-                    <th className="text-left p-3 font-medium">Stock</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.map((p: any) => (
-                    <tr key={p.id} className="border-t border-border">
-                      <td className="p-3 font-medium">{p.name}</td>
-                      <td className="p-3 text-muted-foreground">{p.category}</td>
-                      <td className="p-3">{p.price}</td>
-                      <td className="p-3">
-                        <span className={`text-xs px-2 py-1 rounded-full ${p.in_stock ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"}`}>
-                          {p.in_stock ? "In Stock" : "Out of Stock"}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
+        {tab === "products" && <ProductManager products={products} onRefresh={fetchAll} />}
 
-        {/* Requests */}
         {tab === "requests" && (
           <div className="bg-card rounded-xl shadow-botanical overflow-hidden">
             <div className="p-4 border-b border-border flex items-center justify-between">
@@ -203,21 +166,15 @@ const AdminDashboard = () => {
                           r.status === "Pending" ? "bg-gold/20 text-gold-foreground" :
                           r.status === "Approved" ? "bg-primary/10 text-primary" :
                           "bg-muted text-muted-foreground"
-                        }`}>
-                          {r.status}
-                        </span>
+                        }`}>{r.status}</span>
                       </td>
                       <td className="p-3">
                         <div className="flex gap-1">
                           {r.status === "Pending" && (
-                            <button onClick={() => updateRequestStatus(r.id, "Approved")} className="text-xs bg-primary text-primary-foreground px-3 py-1 rounded-full">
-                              Approve
-                            </button>
+                            <button onClick={() => updateRequestStatus(r.id, "Approved")} className="text-xs bg-primary text-primary-foreground px-3 py-1 rounded-full">Approve</button>
                           )}
                           {r.status !== "Completed" && (
-                            <button onClick={() => updateRequestStatus(r.id, "Completed")} className="text-xs bg-muted text-muted-foreground px-3 py-1 rounded-full">
-                              Complete
-                            </button>
+                            <button onClick={() => updateRequestStatus(r.id, "Completed")} className="text-xs bg-muted text-muted-foreground px-3 py-1 rounded-full">Complete</button>
                           )}
                         </div>
                       </td>
@@ -229,32 +186,12 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* Testimonials */}
-        {tab === "testimonials" && (
-          <div className="bg-card rounded-xl shadow-botanical overflow-hidden">
-            <div className="p-4 border-b border-border">
-              <h2 className="font-heading text-lg font-semibold">Testimonials</h2>
-            </div>
-            <div className="divide-y divide-border">
-              {testimonials.map((t: any) => (
-                <div key={t.id} className="p-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="font-medium">{t.name} <span className="text-xs text-muted-foreground">({t.country})</span></p>
-                      <p className="text-sm text-muted-foreground mt-1">{"⭐".repeat(t.rating)} — {t.text}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        {tab === "testimonials" && <TestimonialManager testimonials={testimonials} onRefresh={fetchAll} />}
 
-        {/* Messages */}
         {tab === "messages" && (
           <div className="bg-card rounded-xl shadow-botanical overflow-hidden">
             <div className="p-4 border-b border-border">
-              <h2 className="font-heading text-lg font-semibold">Contact Messages</h2>
+              <h2 className="font-heading text-lg font-semibold">Contact Messages ({messages.length})</h2>
             </div>
             <div className="divide-y divide-border">
               {messages.map((m: any) => (
