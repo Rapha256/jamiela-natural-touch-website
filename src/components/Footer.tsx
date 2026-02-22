@@ -42,8 +42,9 @@ const Footer = () => (
           </div>
         </div>
       </div>
-      <div className="border-t border-background/10 mt-12 pt-8 text-center text-xs opacity-50">
-        © {new Date().getFullYear()} JAMIELA NATURAL TOUCH. All rights reserved.
+      <div className="border-t border-background/10 mt-12 pt-8 flex items-center justify-between text-xs opacity-50">
+        <span>© {new Date().getFullYear()} JAMIELA NATURAL TOUCH. All rights reserved.</span>
+        <Link to="/admin" className="hover:opacity-100 transition-opacity">Admin Access</Link>
       </div>
     </div>
   </footer>
