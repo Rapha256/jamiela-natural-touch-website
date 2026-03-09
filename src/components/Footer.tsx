@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone, Mail, Instagram } from "lucide-react";
 
 const Footer = () => (
   <footer className="bg-foreground text-background">
@@ -8,8 +8,16 @@ const Footer = () => (
         <div>
           <h3 className="font-heading text-2xl font-semibold mb-4">JAMIELA</h3>
           <p className="text-sm opacity-70 leading-relaxed">
-            Accelerate Your Beauty Naturally. Premium handcrafted hair and body care products from Sukuta, The Gambia.
+            Accelerate Your Beauty Naturally. Premium formulated hair and body care products from Sukuta, The Gambia.
           </p>
+          <a
+            href="https://www.instagram.com/jamielanaturaltouch?igsh=OHFrcjFnMW9rYXcz"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 mt-4 text-sm opacity-70 hover:opacity-100 transition-opacity"
+          >
+            <Instagram size={18} /> @jamielanaturaltouch
+          </a>
         </div>
         <div>
           <h4 className="font-heading text-lg font-medium mb-4">Quick Links</h4>

@@ -1,22 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import heroBg from "@/assets/hero-bg.jpg";
+import heroBg from "@/assets/hero-bg-new.jpeg";
 import logo from "@/assets/logo.jpeg";
-import productHairOil from "@/assets/product-hair-oil.jpg";
-import productGrowthSerum from "@/assets/product-growth-serum.jpg";
-import productHairMist from "@/assets/product-hair-mist.jpg";
-import productHairCream from "@/assets/product-hair-cream.jpg";
-import productBodyCream from "@/assets/product-body-cream.jpg";
 import { ArrowRight, Leaf, Truck, ShieldCheck } from "lucide-react";
-
-const fallbackImages: Record<string, string> = {
-  "Hair Oil": productHairOil,
-  "Growth Serum": productGrowthSerum,
-  "Herbal Hair Mist": productHairMist,
-  "Hair Cream": productHairCream,
-  "Body Cream": productBodyCream,
-};
 
 const Index = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -42,7 +29,7 @@ const Index = () => {
             <span className="text-primary">Naturally</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-8 animate-fade-up" style={{ animationDelay: "0.15s" }}>
-            Premium handcrafted hair and body care products made with nature's finest botanicals in Sukuta, The Gambia.
+            Premium formulated hair and body care products made with nature's finest botanicals in Sukuta, The Gambia.
           </p>
           <div className="flex flex-wrap justify-center gap-4 animate-fade-up" style={{ animationDelay: "0.3s" }}>
             <Link to="/shop" className="bg-primary text-primary-foreground px-8 py-3.5 rounded-full font-medium hover:opacity-90 transition-opacity flex items-center gap-2">
@@ -65,7 +52,7 @@ const Index = () => {
           {[
             { icon: Leaf, title: "100% Natural", desc: "Pure botanical ingredients" },
             { icon: Truck, title: "Worldwide Delivery", desc: "Ship anywhere upon request" },
-            { icon: ShieldCheck, title: "Trusted Quality", desc: "Handcrafted with care" },
+            { icon: ShieldCheck, title: "Trusted Quality", desc: "Formulated with care" },
           ].map(({ icon: Icon, title, desc }) => (
             <div key={title} className="flex flex-col items-center gap-2">
               <Icon className="text-primary" size={32} />
@@ -88,7 +75,7 @@ const Index = () => {
               <div key={product.id} className="group bg-card rounded-xl overflow-hidden shadow-botanical hover:shadow-lg transition-shadow">
                 <div className="aspect-square overflow-hidden bg-muted">
                   <img
-                    src={product.image_url || fallbackImages[product.name] || "/placeholder.svg"}
+                    src={product.image_url || "/placeholder.svg"}
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
@@ -126,7 +113,7 @@ const Index = () => {
             Ready to Transform Your Beauty Routine?
           </h2>
           <p className="text-primary-foreground/80 mb-8 max-w-lg mx-auto">
-            Experience the power of nature with our handcrafted products. Delivered worldwide.
+            Experience the power of nature with our carefully formulated products. Delivered worldwide.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link to="/request" className="bg-background text-foreground px-8 py-3.5 rounded-full font-medium hover:opacity-90 transition-opacity">

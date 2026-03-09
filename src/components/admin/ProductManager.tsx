@@ -34,9 +34,16 @@ const ProductManager = ({ products, onRefresh }: Props) => {
     const file = e.target.files?.[0];
     if (!file || !editing) return;
     setUploading(true);
-    const ext = file.name.split(".").pop();
-    const path = `${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file);
+    
+    // Generate unique filename preserving original extension
+    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const path = `${Date.now()}-${Math.random().toString(36).substring(2)}.${ext}`;
+    
+    const { error } = await supabase.storage.from("product-images").upload(path, file, {
+      contentType: file.type,
+      cacheControl: "3600",
+    });
+    
     if (error) {
       toast({ title: "Upload failed", description: error.message, variant: "destructive" });
     } else {
@@ -127,14 +134,19 @@ const ProductManager = ({ products, onRefresh }: Props) => {
                   className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" rows={3} />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Product Image</label>
+                <label className="block text-sm font-medium mb-1">Product Image / Video</label>
                 {editing.image_url && (
-                  <img src={editing.image_url} alt="" className="w-24 h-24 object-cover rounded-lg mb-2" />
+                  editing.image_url.match(/\.(mp4|mov|avi|webm|mkv)$/i) ? (
+                    <video src={editing.image_url} className="w-32 h-24 object-cover rounded-lg mb-2" controls muted />
+                  ) : (
+                    <img src={editing.image_url} alt="" className="w-24 h-24 object-cover rounded-lg mb-2" />
+                  )
                 )}
                 <label className="flex items-center gap-2 cursor-pointer text-sm text-primary">
-                  <Upload size={16} /> {uploading ? "Uploading..." : "Upload Image"}
-                  <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                  <Upload size={16} /> {uploading ? "Uploading..." : "Upload Image / Video"}
+                  <input type="file" accept="image/*,video/*" onChange={handleImageUpload} className="hidden" />
                 </label>
+                <p className="text-xs text-muted-foreground mt-1">Supports all image & video formats (JPG, PNG, HEIC, WebP, MP4, MOV, etc.)</p>
               </div>
               <div className="flex items-center gap-2">
                 <input type="checkbox" checked={editing.in_stock ?? true} onChange={e => setEditing({ ...editing, in_stock: e.target.checked })}
@@ -167,7 +179,11 @@ const ProductManager = ({ products, onRefresh }: Props) => {
               <tr key={p.id} className="border-t border-border">
                 <td className="p-3">
                   {p.image_url ? (
-                    <img src={p.image_url} alt={p.name} className="w-10 h-10 object-cover rounded" />
+                    p.image_url.match(/\.(mp4|mov|avi|webm|mkv)$/i) ? (
+                      <video src={p.image_url} className="w-10 h-10 object-cover rounded" muted />
+                    ) : (
+                      <img src={p.image_url} alt={p.name} className="w-10 h-10 object-cover rounded" />
+                    )
                   ) : (
                     <div className="w-10 h-10 bg-muted rounded flex items-center justify-center text-xs text-muted-foreground">N/A</div>
                   )}
