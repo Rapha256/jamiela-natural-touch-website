@@ -1,19 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import productHairOil from "@/assets/product-hair-oil.jpg";
-import productGrowthSerum from "@/assets/product-growth-serum.jpg";
-import productHairMist from "@/assets/product-hair-mist.jpg";
-import productHairCream from "@/assets/product-hair-cream.jpg";
-import productBodyCream from "@/assets/product-body-cream.jpg";
-
-const fallbackImages: Record<string, string> = {
-  "Hair Oil": productHairOil,
-  "Growth Serum": productGrowthSerum,
-  "Herbal Hair Mist": productHairMist,
-  "Hair Cream": productHairCream,
-  "Body Cream": productBodyCream,
-};
 
 const categories = ["All", "Hair Care", "Body Care"];
 
@@ -38,7 +25,7 @@ const Shop = () => {
       <section className="py-20 bg-secondary">
         <div className="container mx-auto px-4 text-center">
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">Our Products</h1>
-          <p className="text-muted-foreground">Handcrafted with nature's finest ingredients</p>
+          <p className="text-muted-foreground">Formulated with nature's finest ingredients</p>
         </div>
       </section>
 
@@ -66,7 +53,7 @@ const Shop = () => {
                 <div key={product.id} className="group bg-card rounded-xl overflow-hidden shadow-botanical hover:shadow-lg transition-shadow">
                   <div className="aspect-square overflow-hidden bg-muted relative">
                     <img
-                      src={product.image_url || fallbackImages[product.name] || "/placeholder.svg"}
+                      src={product.image_url || "/placeholder.svg"}
                       alt={product.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"

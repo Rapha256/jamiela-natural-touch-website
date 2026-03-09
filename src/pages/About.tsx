@@ -6,7 +6,7 @@ const About = () => (
       <div className="container mx-auto px-4 text-center">
         <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">Our Story</h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Rooted in nature, crafted with love from the heart of The Gambia.
+          Rooted in nature, formulated with care from the heart of The Gambia.
         </p>
       </div>
     </section>
@@ -28,7 +28,7 @@ const About = () => (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
           {[
             { icon: Leaf, title: "Natural Ingredients", desc: "We source only the finest botanical ingredients from trusted suppliers." },
-            { icon: Heart, title: "Made with Love", desc: "Every product is handcrafted with care and attention to detail." },
+            { icon: Heart, title: "Made with Love", desc: "Every product is formulated with care and attention to detail." },
             { icon: Globe, title: "Global Reach", desc: "We deliver worldwide, bringing Gambian beauty traditions to the world." },
           ].map(({ icon: Icon, title, desc }) => (
             <div key={title} className="bg-card rounded-xl p-6 shadow-botanical text-center">
