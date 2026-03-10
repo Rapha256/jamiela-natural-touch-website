@@ -140,6 +140,7 @@ export type Database = {
           name: string
           rating: number
           text: string
+          video_url: string | null
         }
         Insert: {
           country?: string | null
@@ -149,6 +150,7 @@ export type Database = {
           name: string
           rating?: number
           text: string
+          video_url?: string | null
         }
         Update: {
           country?: string | null
@@ -158,6 +160,7 @@ export type Database = {
           name?: string
           rating?: number
           text?: string
+          video_url?: string | null
         }
         Relationships: []
       }
