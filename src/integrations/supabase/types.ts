@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      consultations: {
+        Row: {
+          additional_info: string | null
+          concerns: string[]
+          contact_info: string
+          contact_method: string
+          created_at: string
+          current_products: string[]
+          current_routine_notes: string | null
+          desired_routine: string | null
+          dryness_frequency: string | null
+          goals: string[]
+          hair_thickness: string | null
+          hair_type: string | null
+          id: string
+          name: string
+          protective_styles: string | null
+          status: string
+          wash_frequency: string | null
+        }
+        Insert: {
+          additional_info?: string | null
+          concerns?: string[]
+          contact_info: string
+          contact_method: string
+          created_at?: string
+          current_products?: string[]
+          current_routine_notes?: string | null
+          desired_routine?: string | null
+          dryness_frequency?: string | null
+          goals?: string[]
+          hair_thickness?: string | null
+          hair_type?: string | null
+          id?: string
+          name: string
+          protective_styles?: string | null
+          status?: string
+          wash_frequency?: string | null
+        }
+        Update: {
+          additional_info?: string | null
+          concerns?: string[]
+          contact_info?: string
+          contact_method?: string
+          created_at?: string
+          current_products?: string[]
+          current_routine_notes?: string | null
+          desired_routine?: string | null
+          dryness_frequency?: string | null
+          goals?: string[]
+          hair_thickness?: string | null
+          hair_type?: string | null
+          id?: string
+          name?: string
+          protective_styles?: string | null
+          status?: string
+          wash_frequency?: string | null
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string
