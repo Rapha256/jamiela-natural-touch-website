@@ -27,7 +27,7 @@ const Returns = () => (
         </div>
 
         <Section title="Damaged or Incorrect Items">
-          <p>If your order arrives damaged, incorrect, or incomplete, contact us within 48 hours of delivery with:</p>
+          <p>If your order arrives damaged, incorrect, or incomplete, contact us as soon as possible after receiving it with:</p>
           <ul className="list-disc list-inside space-y-1">
             <li>Your order details</li>
             <li>Clear photos of the item and packaging</li>
@@ -55,15 +55,16 @@ const Returns = () => (
         </Section>
 
         <Section title="Order Cancellation">
-          <p>Orders may not be cancelled once they have been processed or dispatched.</p>
+          <p>If you need to change or cancel an order, contact us as soon as possible. Requests will be considered according to the order's status. Once an order has been prepared or dispatched, changes or cancellations may no longer be possible.</p>
         </Section>
 
         <Section title="Contact Us">
           <p>
             To report an order issue, contact us at <a href="mailto:info@jamielanaturaltouch.com" className="text-primary hover:underline">info@jamielanaturaltouch.com</a> or WhatsApp{" "}
-            <a href="https://wa.me/2204129401" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">+220 412 9401</a> within 48 hours of delivery.
+            <a href="https://wa.me/2204129401" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">+220 412 9401</a> as soon as possible after receiving your order.
           </p>
         </Section>
+        <p className="text-sm text-muted-foreground">This policy is subject to any consumer rights that cannot legally be excluded under applicable law.</p>
       </div>
     </section>
   </div>

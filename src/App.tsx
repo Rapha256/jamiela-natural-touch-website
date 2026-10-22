@@ -16,6 +16,11 @@ import Contact from "./pages/Contact";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
+import Consultation from "./pages/Consultation";
+import FAQ from "./pages/FAQ";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Returns from "./pages/Returns";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +48,11 @@ const App = () => (
                   <Route path="/testimonials" element={<Testimonials />} />
                   <Route path="/delivery" element={<Delivery />} />
                   <Route path="/contact" element={<Contact />} />
+                   <Route path="/consultation" element={<Consultation />} />
+                   <Route path="/faq" element={<FAQ />} />
+                   <Route path="/privacy" element={<Privacy />} />
+                   <Route path="/terms" element={<Terms />} />
+                   <Route path="/returns" element={<Returns />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>

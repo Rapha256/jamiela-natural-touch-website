@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail, Instagram } from "lucide-react";
+import { publicLinks } from "@/lib/navigation";
 
 const Footer = () => (
   <footer className="bg-foreground text-background">
@@ -8,7 +9,7 @@ const Footer = () => (
         <div>
           <h3 className="font-heading text-2xl font-semibold mb-4">JAMIELA</h3>
           <p className="text-sm opacity-70 leading-relaxed">
-            Accelerate Your Beauty Naturally. Premium formulated hair and body care products from Sukuta, The Gambia.
+            Scientifically Minded. Botanically Inspired. Purposefully Formulated. From The Gambia to the world.
           </p>
           <a
             href="https://www.instagram.com/jamielanaturaltouch?igsh=OHFrcjFnMW9rYXcz"
@@ -22,13 +23,7 @@ const Footer = () => (
         <div>
           <h4 className="font-heading text-lg font-medium mb-4">Quick Links</h4>
           <div className="flex flex-col gap-2">
-            {[
-              { to: "/shop", label: "Shop" },
-              { to: "/request", label: "Send Request" },
-              { to: "/about", label: "About Us" },
-              { to: "/delivery", label: "Delivery Info" },
-              { to: "/contact", label: "Contact" },
-            ].map((l) => (
+            {publicLinks.map((l) => (
               <Link key={l.to} to={l.to} className="text-sm opacity-70 hover:opacity-100 transition-opacity">
                 {l.label}
               </Link>
@@ -50,7 +45,7 @@ const Footer = () => (
           </div>
         </div>
       </div>
-      <div className="border-t border-background/10 mt-12 pt-8 flex items-center justify-between text-xs opacity-50">
+      <div className="border-t border-background/10 mt-12 pt-8 flex flex-wrap gap-4 items-center justify-between text-xs opacity-50">
         <span>© {new Date().getFullYear()} JAMIELA NATURAL TOUCH. All rights reserved.</span>
         <Link to="/admin" className="hover:opacity-100 transition-opacity">Admin Access</Link>
       </div>

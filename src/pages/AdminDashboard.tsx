@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Package, MessageSquare, Star, Mail, LayoutDashboard } from "lucide-react";
+import { LogOut, Package, MessageSquare, Star, Mail, LayoutDashboard, ClipboardList } from "lucide-react";
 import ProductManager from "@/components/admin/ProductManager";
 import TestimonialManager from "@/components/admin/TestimonialManager";
+import ConsultationManager from "@/components/admin/ConsultationManager";
+import type { Tables } from "@/integrations/supabase/types";
+import { Button } from "@/components/ui/button";
 
-type TabType = "overview" | "products" | "requests" | "testimonials" | "messages";
+type TabType = "overview" | "products" | "requests" | "testimonials" | "messages" | "consultations";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -17,6 +20,7 @@ const AdminDashboard = () => {
   const [requests, setRequests] = useState<any[]>([]);
   const [testimonials, setTestimonials] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
+  const [consultations, setConsultations] = useState<Tables<"consultations">[]>([]);
 
   useEffect(() => {
     checkAuth();
@@ -37,16 +41,21 @@ const AdminDashboard = () => {
 
   const fetchAll = async () => {
     setLoading(true);
-    const [prodRes, reqRes, testRes, msgRes] = await Promise.all([
+    const [prodRes, reqRes, testRes, msgRes, consultationRes] = await Promise.all([
       supabase.from("products").select("*").order("created_at"),
       supabase.from("requests").select("*").order("created_at", { ascending: false }),
       supabase.from("testimonials").select("*").order("created_at", { ascending: false }),
       supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
+      supabase.from("consultations").select("*").order("created_at", { ascending: false }),
     ]);
     setProducts(prodRes.data || []);
     setRequests(reqRes.data || []);
     setTestimonials(testRes.data || []);
     setMessages(msgRes.data || []);
+    setConsultations(consultationRes.data || []);
+    if ([prodRes, reqRes, testRes, msgRes, consultationRes].some(result => result.error)) {
+      toast({ title: "Some records could not be loaded", description: "Please refresh and try again.", variant: "destructive" });
+    }
     setLoading(false);
   };
 
@@ -84,6 +93,7 @@ const AdminDashboard = () => {
     { id: "requests", label: "Requests", icon: MessageSquare },
     { id: "testimonials", label: "Testimonials", icon: Star },
     { id: "messages", label: "Messages", icon: Mail },
+    { id: "consultations", label: "Consultations", icon: ClipboardList },
   ];
 
   if (loading) {
@@ -98,20 +108,20 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-secondary">
       <div className="bg-card border-b border-border px-4 py-3 flex items-center justify-between">
         <h1 className="font-heading text-lg font-bold">JAMIELA Admin</h1>
-        <button onClick={handleSignOut} className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-sm">
+        <Button variant="ghost" onClick={handleSignOut} className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-sm">
           <LogOut size={16} /> Sign Out
-        </button>
+        </Button>
       </div>
 
       <div className="container mx-auto px-4 py-6">
         <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
           {tabs.map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)}
+            <Button key={t.id} onClick={() => setTab(t.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                 tab === t.id ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:bg-muted"
               }`}>
               <t.icon size={16} /> {t.label}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -125,6 +135,7 @@ const AdminDashboard = () => {
               { label: "Completed", value: completedRequests, color: "text-muted-foreground" },
               { label: "Testimonials", value: testimonials.length, color: "text-gold" },
               { label: "Messages", value: messages.length, color: "text-foreground" },
+              { label: "Consultations", value: consultations.length, color: "text-primary" },
             ].map(s => (
               <div key={s.label} className="bg-card rounded-xl p-6 shadow-botanical">
                 <p className="text-sm text-muted-foreground">{s.label}</p>
@@ -135,6 +146,7 @@ const AdminDashboard = () => {
         )}
 
         {tab === "products" && <ProductManager products={products} onRefresh={fetchAll} />}
+        {tab === "consultations" && <ConsultationManager consultations={consultations} onRefresh={fetchAll} />}
 
         {tab === "requests" && (
           <div className="bg-card rounded-xl shadow-botanical overflow-hidden">
