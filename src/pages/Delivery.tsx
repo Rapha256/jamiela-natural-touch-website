@@ -4,8 +4,8 @@ const Delivery = () => (
   <div>
     <section className="py-20 bg-secondary">
       <div className="container mx-auto px-4 text-center">
-        <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">Delivery Information</h1>
-        <p className="text-muted-foreground">We bring nature's best to your doorstep</p>
+        <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">Delivery Policy</h1>
+        <p className="text-muted-foreground">From The Gambia to the world</p>
       </div>
     </section>
 
@@ -13,7 +13,7 @@ const Delivery = () => (
       <div className="container mx-auto px-4 max-w-3xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {[
-            { icon: MapPin, title: "Based in Sukuta", desc: "Our products are handcrafted in Sukuta, The Gambia." },
+            { icon: MapPin, title: "Based in Sukuta", desc: "Our products are formulated with care in Sukuta, The Gambia." },
             { icon: Globe, title: "Worldwide Delivery", desc: "We deliver anywhere in the world upon request." },
             { icon: Truck, title: "Cost Estimate", desc: "Delivery cost depends on location and order quantity." },
           ].map(({ icon: Icon, title, desc }) => (
@@ -25,15 +25,22 @@ const Delivery = () => (
           ))}
         </div>
 
-        <div className="bg-card rounded-xl p-8 shadow-botanical space-y-4 text-muted-foreground">
+        <div className="space-y-4 text-muted-foreground">
           <h2 className="font-heading text-2xl font-bold text-foreground">How It Works</h2>
           <ol className="list-decimal list-inside space-y-3">
             <li>Browse our products and choose what you'd like.</li>
             <li>Send a request through our website or WhatsApp.</li>
-            <li>We'll confirm availability and calculate delivery cost.</li>
-            <li>Once confirmed, we'll prepare and ship your order.</li>
+            <li>We'll confirm availability and quote delivery separately from product prices.</li>
+            <li>Official payment instructions are provided through our official contact channels after confirmation.</li>
+            <li>After payment verification, we'll prepare and ship your order.</li>
             <li>You'll receive tracking info and delivery updates via WhatsApp.</li>
           </ol>
+          <h2 className="font-heading text-2xl font-bold text-foreground pt-6">Local Gambia Delivery</h2>
+          <p>Delivery fees depend on your specific location. Delivery timeframes and local collection options will be communicated upon order confirmation.</p>
+          <h2 className="font-heading text-2xl font-bold text-foreground pt-6">International Shipping</h2>
+          <p>Worldwide delivery is available upon request. Shipping costs depend on your destination and total package weight. Our team will confirm the shipping quote and estimated delivery time before payment.</p>
+          <h2 className="font-heading text-2xl font-bold text-foreground pt-6">Product Enquiries</h2>
+          <p>Please ask about products, ingredients, or routine compatibility before finalizing your order.</p>
           <p className="pt-4">
             For questions about delivery, reach us at{" "}
             <a href="https://wa.me/2204129401" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">
