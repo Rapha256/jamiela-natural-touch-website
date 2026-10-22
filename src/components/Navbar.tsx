@@ -2,16 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/logo.jpeg";
+import { Button } from "@/components/ui/button";
+import { publicLinks } from "@/lib/navigation";
 
-const navLinks = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
-  { to: "/shop", label: "Shop" },
-  { to: "/request", label: "Request" },
-  { to: "/testimonials", label: "Testimonials" },
-  { to: "/delivery", label: "Delivery" },
-  { to: "/contact", label: "Contact" },
-];
+const navLinks = publicLinks.slice(0, 7);
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -29,7 +23,7 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden lg:flex items-center gap-8">
+        <div className="hidden xl:flex items-center gap-5">
           {navLinks.map((link) => (
             <Link
               key={link.to}
@@ -52,16 +46,16 @@ const Navbar = () => {
         </div>
 
         {/* Mobile toggle */}
-        <button onClick={() => setOpen(!open)} className="lg:hidden text-foreground p-2">
+        <Button variant="ghost" size="icon" onClick={() => setOpen(!open)} className="xl:hidden text-foreground" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open}>
           {open ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        </Button>
       </div>
 
       {/* Mobile menu */}
       {open && (
-        <div className="lg:hidden border-t border-border bg-background animate-fade-in">
-          <div className="container mx-auto py-4 px-4 flex flex-col gap-3">
-            {navLinks.map((link) => (
+        <div className="xl:hidden border-t border-border bg-background animate-fade-in max-h-[80vh] overflow-y-auto">
+          <div className="container mx-auto py-4 px-4 flex flex-col gap-2">
+            {publicLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
