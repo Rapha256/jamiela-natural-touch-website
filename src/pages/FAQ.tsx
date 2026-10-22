@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const FAQS = [
   {
@@ -50,13 +51,13 @@ const FAQItem = ({ q, a }: { q: string; a: string }) => {
   const [open, setOpen] = useState(false);
   return (
     <div className="bg-card rounded-xl shadow-botanical overflow-hidden">
-      <button
+      <Button variant="ghost" aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
+        className="h-auto whitespace-normal w-full flex items-center justify-between gap-4 px-6 py-5 text-left hover:bg-muted hover:text-foreground"
       >
         <span className="font-heading text-lg font-semibold">{q}</span>
         <ChevronDown className={`shrink-0 text-primary transition-transform ${open ? "rotate-180" : ""}`} size={20} />
-      </button>
+      </Button>
       {open && <p className="px-6 pb-6 text-muted-foreground leading-relaxed">{a}</p>}
     </div>
   );

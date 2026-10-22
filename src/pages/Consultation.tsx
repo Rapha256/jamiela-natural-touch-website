@@ -2,6 +2,7 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const GOALS = [
   "Grow longer", "Retain more length", "Reduce breakage", "Improve thickness/fullness",
@@ -31,17 +32,19 @@ const STEP_TITLES = [
 ];
 
 const Chip = ({ selected, onClick, children }: { selected: boolean; onClick: () => void; children: React.ReactNode }) => (
-  <button
+  <Button
     type="button"
+    variant="outline"
+    aria-pressed={selected}
     onClick={onClick}
-    className={`px-4 py-2.5 rounded-full text-sm font-medium border-2 transition-colors text-left ${
+    className={`h-auto whitespace-normal justify-start px-4 py-2.5 rounded-full text-sm font-medium border-2 transition-colors text-left ${
       selected
         ? "bg-primary text-primary-foreground border-primary"
         : "border-border bg-card text-foreground hover:border-primary/50"
     }`}
   >
     {children}
-  </button>
+  </Button>
 );
 
 const Consultation = () => {
@@ -83,6 +86,7 @@ const Consultation = () => {
   };
 
   const handleSubmit = async () => {
+    if (!canNext() || submitting) return;
     setSubmitting(true);
     const { error } = await supabase.from("consultations").insert({
       name: name.trim().slice(0, 100),
@@ -264,8 +268,9 @@ const Consultation = () => {
               <div className="space-y-6">
                 <h2 className="font-heading text-2xl font-semibold">Where should we send your personalized routine?</h2>
                 <div>
-                  <label className="text-sm font-medium block mb-2">Name</label>
+                  <label htmlFor="consultation-name" className="text-sm font-medium block mb-2">Name</label>
                   <input
+                    id="consultation-name"
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -280,8 +285,9 @@ const Consultation = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium block mb-2">Contact Information (Phone / Handle / Email)</label>
+                  <label htmlFor="consultation-contact" className="text-sm font-medium block mb-2">Contact Information (Phone / Handle / Email)</label>
                   <input
+                    id="consultation-contact"
                     type="text"
                     value={contactInfo}
                     onChange={(e) => setContactInfo(e.target.value)}
@@ -294,32 +300,32 @@ const Consultation = () => {
 
             {/* Navigation */}
             <div className="flex items-center justify-between mt-10 pt-6 border-t border-border">
-              <button
+              <Button variant="ghost"
                 type="button"
                 onClick={() => setStep((s) => Math.max(0, s - 1))}
                 disabled={step === 0}
                 className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-0 transition-opacity"
               >
                 <ArrowLeft size={16} /> Back
-              </button>
+              </Button>
               {step < 7 ? (
-                <button
+                <Button
                   type="button"
                   onClick={() => canNext() && setStep((s) => s + 1)}
                   disabled={!canNext()}
                   className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-40"
                 >
                   Next <ArrowRight size={16} />
-                </button>
+                </Button>
               ) : (
-                <button
+                <Button
                   type="button"
                   onClick={handleSubmit}
                   disabled={!canNext() || submitting}
                   className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-40"
                 >
                   <Sparkles size={16} /> {submitting ? "Submitting..." : "Submit My Routine"}
-                </button>
+                </Button>
               )}
             </div>
           </div>
