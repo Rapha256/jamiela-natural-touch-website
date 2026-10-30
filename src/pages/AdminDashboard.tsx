@@ -8,8 +8,9 @@ import TestimonialManager from "@/components/admin/TestimonialManager";
 import ConsultationManager from "@/components/admin/ConsultationManager";
 import type { Tables } from "@/integrations/supabase/types";
 import { Button } from "@/components/ui/button";
+import ContentManager from "@/components/admin/ContentManager";
 
-type TabType = "overview" | "products" | "requests" | "testimonials" | "messages" | "consultations";
+type TabType = "overview" | "products" | "requests" | "testimonials" | "messages" | "consultations" | "content";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -94,6 +95,7 @@ const AdminDashboard = () => {
     { id: "testimonials", label: "Testimonials", icon: Star },
     { id: "messages", label: "Messages", icon: Mail },
     { id: "consultations", label: "Consultations", icon: ClipboardList },
+    { id: "content", label: "Website Content", icon: ClipboardList },
   ];
 
   if (loading) {
@@ -146,6 +148,7 @@ const AdminDashboard = () => {
         )}
 
         {tab === "products" && <ProductManager products={products} onRefresh={fetchAll} />}
+        {tab === "content" && <ContentManager />}
         {tab === "consultations" && <ConsultationManager consultations={consultations} onRefresh={fetchAll} />}
 
         {tab === "requests" && (
