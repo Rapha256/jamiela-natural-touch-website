@@ -1,35 +1,22 @@
+import { usePageCopy } from "@/hooks/use-page-copy";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const GOALS = [
-  "Grow longer", "Retain more length", "Reduce breakage", "Improve thickness/fullness",
-  "Improve scalp health", "Improve moisture & hydration", "Reduce frizz",
-  "Make my hair easier to manage", "Maintain healthy hair", "Other",
-];
-const CONCERNS = [
-  "Excessive breakage", "Dryness", "Frizz", "Tangling/knots", "Thin or weak-looking hair",
-  "Thinning hairline", "Uneven thickness", "Difficulty retaining length", "Scalp dryness",
-  "Oily scalp", "Dandruff/flaking", "Hair that feels difficult to manage", "None of these",
-];
-const HAIR_TYPES = ["Straight", "Wavy", "Curly", "Coily", "Texturized", "Relaxed", "Chemically treated", "Other / I'm not sure"];
-const THICKNESS = ["Fine", "Medium", "Thick", "Very thick", "I'm not sure"];
-const WASH_FREQ = ["Several times a week", "Once a week", "Every 1–2 weeks", "Less frequently", "It varies"];
-const PROTECTIVE = ["Yes, frequently", "Sometimes", "Rarely", "Never"];
-const DRYNESS = ["Almost always", "Often", "Sometimes", "Rarely", "Never"];
-const CURRENT_PRODUCTS = ["Hair oils", "Hair serums", "Hair creams", "Hair Shampoo", "Hair Conditioner", "Hair mists", "Other"];
-const DESIRED = [
-  "Simple & minimal", "Growth & length-retention focused", "Moisture & hydration focused",
-  "Scalp-care focused", "Protective-style routine", "Complete routine", "I'm not sure — choose for me",
-];
-const CONTACT_METHODS = ["WhatsApp", "Instagram", "Email"];
 
-const STEP_TITLES = [
-  "Your Goal", "Your Concerns", "Your Hair", "Your Routine",
-  "What You Currently Use", "Your Desired Routine", "Tell Us More", "Contact Details",
-];
+
+
+
+
+
+
+
+
+
+
+
 
 const Chip = ({ selected, onClick, children }: { selected: boolean; onClick: () => void; children: React.ReactNode }) => (
   <Button
@@ -48,19 +35,25 @@ const Chip = ({ selected, onClick, children }: { selected: boolean; onClick: () 
 );
 
 const Consultation = () => {
+  const { t, list } = usePageCopy("consultation");
+  const GOALS = list("GOALS");
+  const CONCERNS = list("CONCERNS");
+  const HAIR_TYPES = list("HAIR_TYPES");
+  const THICKNESS = list("THICKNESS");
+  const WASH_FREQ = list("WASH_FREQ");
+  const PROTECTIVE = list("PROTECTIVE");
+  const DRYNESS = list("DRYNESS");
+  const CURRENT_PRODUCTS = list("CURRENT_PRODUCTS");
+  const DESIRED = list("DESIRED");
+  const CONTACT_METHODS = list("CONTACT_METHODS");
+  const STEP_TITLES = list("STEP_TITLES");
+
   const { toast } = useToast();
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const [goals, setGoals] = useState<string[]>([]);
-  const [concerns, setConcerns] = useState<string[]>([]);
-  const [hairType, setHairType] = useState("");
-  const [thickness, setThickness] = useState("");
-  const [washFreq, setWashFreq] = useState("");
-  const [protective, setProtective] = useState("");
-  const [dryness, setDryness] = useState("");
-  const [currentProducts, setCurrentProducts] = useState<string[]>([]);
+  const [goals, setGoals] = useState<string[]>{t("text_1")}<string[]>{t("text_2")}<string[]>([]);
   const [routineNotes, setRoutineNotes] = useState("");
   const [desired, setDesired] = useState("");
   const [additional, setAdditional] = useState("");
@@ -120,11 +113,8 @@ const Consultation = () => {
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
             <Check className="text-primary" size={32} />
           </div>
-          <h1 className="font-heading text-3xl md:text-4xl font-bold mb-4">Your hair story has been received.</h1>
-          <p className="text-muted-foreground leading-relaxed">
-            Every head of hair has different needs, and that's exactly why we don't believe in one routine for everyone.
-            We'll review your answers and create a JNT routine based on your goals and what your hair needs.
-          </p>
+          <h1 className="font-heading text-3xl md:text-4xl font-bold mb-4">{t("text_3")}</h1>
+          <p className="text-muted-foreground leading-relaxed">{t("text_4")}</p>
         </div>
       </div>
     );
@@ -134,12 +124,9 @@ const Consultation = () => {
     <div>
       <section className="py-16 bg-secondary">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-xs tracking-[0.3em] uppercase text-primary font-medium mb-3">Hair Consultation</p>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">Get Your JNT Routine</h1>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Your hair is unique. Your routine should be too. Tell us about your hair, your concerns, and your goals —
-            we'll create a personalized JNT routine for you.
-          </p>
+          <p className="text-xs tracking-[0.3em] uppercase text-primary font-medium mb-3">{t("text_5")}</p>
+          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">{t("text_6")}</h1>
+          <p className="text-muted-foreground max-w-xl mx-auto">{t("text_7")}</p>
         </div>
       </section>
 
@@ -158,8 +145,8 @@ const Consultation = () => {
           <div className="bg-card rounded-xl p-6 md:p-8 shadow-botanical">
             {step === 0 && (
               <div>
-                <h2 className="font-heading text-2xl font-semibold mb-2">What are you currently trying to achieve with your hair?</h2>
-                <p className="text-sm text-muted-foreground mb-6">Select all that apply.</p>
+                <h2 className="font-heading text-2xl font-semibold mb-2">{t("text_8")}</h2>
+                <p className="text-sm text-muted-foreground mb-6">{t("text_9")}</p>
                 <div className="flex flex-wrap gap-2">
                   {GOALS.map((g) => <Chip key={g} selected={goals.includes(g)} onClick={() => toggle(goals, setGoals, g)}>{g}</Chip>)}
                 </div>
@@ -168,8 +155,8 @@ const Consultation = () => {
 
             {step === 1 && (
               <div>
-                <h2 className="font-heading text-2xl font-semibold mb-2">What are you currently experiencing?</h2>
-                <p className="text-sm text-muted-foreground mb-6">Select all that apply.</p>
+                <h2 className="font-heading text-2xl font-semibold mb-2">{t("text_10")}</h2>
+                <p className="text-sm text-muted-foreground mb-6">{t("text_11")}</p>
                 <div className="flex flex-wrap gap-2">
                   {CONCERNS.map((c) => <Chip key={c} selected={concerns.includes(c)} onClick={() => toggle(concerns, setConcerns, c)}>{c}</Chip>)}
                 </div>
@@ -179,13 +166,13 @@ const Consultation = () => {
             {step === 2 && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="font-heading text-2xl font-semibold mb-4">How would you describe your hair?</h2>
+                  <h2 className="font-heading text-2xl font-semibold mb-4">{t("text_12")}</h2>
                   <div className="flex flex-wrap gap-2">
                     {HAIR_TYPES.map((t) => <Chip key={t} selected={hairType === t} onClick={() => setHairType(t)}>{t}</Chip>)}
                   </div>
                 </div>
                 <div>
-                  <h2 className="font-heading text-2xl font-semibold mb-4">How would you describe your hair's thickness?</h2>
+                  <h2 className="font-heading text-2xl font-semibold mb-4">{t("text_13")}</h2>
                   <div className="flex flex-wrap gap-2">
                     {THICKNESS.map((t) => <Chip key={t} selected={thickness === t} onClick={() => setThickness(t)}>{t}</Chip>)}
                   </div>
@@ -196,19 +183,19 @@ const Consultation = () => {
             {step === 3 && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="font-heading text-2xl font-semibold mb-4">How often do you usually wash your hair?</h2>
+                  <h2 className="font-heading text-2xl font-semibold mb-4">{t("text_14")}</h2>
                   <div className="flex flex-wrap gap-2">
                     {WASH_FREQ.map((t) => <Chip key={t} selected={washFreq === t} onClick={() => setWashFreq(t)}>{t}</Chip>)}
                   </div>
                 </div>
                 <div>
-                  <h2 className="font-heading text-2xl font-semibold mb-4">Do you regularly wear protective styles?</h2>
+                  <h2 className="font-heading text-2xl font-semibold mb-4">{t("text_15")}</h2>
                   <div className="flex flex-wrap gap-2">
                     {PROTECTIVE.map((t) => <Chip key={t} selected={protective === t} onClick={() => setProtective(t)}>{t}</Chip>)}
                   </div>
                 </div>
                 <div>
-                  <h2 className="font-heading text-2xl font-semibold mb-4">How often does your hair usually feel dry?</h2>
+                  <h2 className="font-heading text-2xl font-semibold mb-4">{t("text_16")}</h2>
                   <div className="flex flex-wrap gap-2">
                     {DRYNESS.map((t) => <Chip key={t} selected={dryness === t} onClick={() => setDryness(t)}>{t}</Chip>)}
                   </div>
@@ -219,20 +206,20 @@ const Consultation = () => {
             {step === 4 && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="font-heading text-2xl font-semibold mb-2">What products do you currently use?</h2>
-                  <p className="text-sm text-muted-foreground mb-4">Select all that apply.</p>
+                  <h2 className="font-heading text-2xl font-semibold mb-2">{t("text_17")}</h2>
+                  <p className="text-sm text-muted-foreground mb-4">{t("text_18")}</p>
                   <div className="flex flex-wrap gap-2">
                     {CURRENT_PRODUCTS.map((t) => <Chip key={t} selected={currentProducts.includes(t)} onClick={() => toggle(currentProducts, setCurrentProducts, t)}>{t}</Chip>)}
                   </div>
                 </div>
                 <div>
-                  <label className="font-heading text-lg font-semibold block mb-2">Anything else about your current routine? (Optional)</label>
+                  <label className="font-heading text-lg font-semibold block mb-2">{t("text_19")}</label>
                   <textarea
                     value={routineNotes}
                     onChange={(e) => setRoutineNotes(e.target.value)}
                     maxLength={1000}
                     rows={4}
-                    placeholder="Describe products, frequency, or habits"
+                    placeholder={t("text_29")}
                     className="w-full rounded-lg border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
@@ -241,7 +228,7 @@ const Consultation = () => {
 
             {step === 5 && (
               <div>
-                <h2 className="font-heading text-2xl font-semibold mb-4">What kind of routine are you looking for?</h2>
+                <h2 className="font-heading text-2xl font-semibold mb-4">{t("text_20")}</h2>
                 <div className="flex flex-wrap gap-2">
                   {DESIRED.map((t) => <Chip key={t} selected={desired === t} onClick={() => setDesired(t)}>{t}</Chip>)}
                 </div>
@@ -250,10 +237,8 @@ const Consultation = () => {
 
             {step === 6 && (
               <div>
-                <h2 className="font-heading text-2xl font-semibold mb-2">Is there anything specific you'd like us to know about your hair?</h2>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Example: "My hair grows but breaks easily", "My edges are thinner than the rest of my hair", or "My hair is very thick and gets dry quickly."
-                </p>
+                <h2 className="font-heading text-2xl font-semibold mb-2">{t("text_21")}</h2>
+                <p className="text-sm text-muted-foreground mb-4">{t("text_22")}</p>
                 <textarea
                   value={additional}
                   onChange={(e) => setAdditional(e.target.value)}
@@ -266,9 +251,9 @@ const Consultation = () => {
 
             {step === 7 && (
               <div className="space-y-6">
-                <h2 className="font-heading text-2xl font-semibold">Where should we send your personalized routine?</h2>
+                <h2 className="font-heading text-2xl font-semibold">{t("text_23")}</h2>
                 <div>
-                  <label htmlFor="consultation-name" className="text-sm font-medium block mb-2">Name</label>
+                  <label htmlFor="consultation-name" className="text-sm font-medium block mb-2">{t("text_24")}</label>
                   <input
                     id="consultation-name"
                     type="text"
@@ -279,13 +264,13 @@ const Consultation = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium block mb-2">Preferred Contact Method</label>
+                  <label className="text-sm font-medium block mb-2">{t("text_25")}</label>
                   <div className="flex flex-wrap gap-2">
                     {CONTACT_METHODS.map((m) => <Chip key={m} selected={contactMethod === m} onClick={() => setContactMethod(m)}>{m}</Chip>)}
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="consultation-contact" className="text-sm font-medium block mb-2">Contact Information (Phone / Handle / Email)</label>
+                  <label htmlFor="consultation-contact" className="text-sm font-medium block mb-2">{t("text_26")}</label>
                   <input
                     id="consultation-contact"
                     type="text"
@@ -306,16 +291,14 @@ const Consultation = () => {
                 disabled={step === 0}
                 className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-0 transition-opacity"
               >
-                <ArrowLeft size={16} /> Back
-              </Button>
+                <ArrowLeft size={16} />{t("text_27")}</Button>
               {step < 7 ? (
                 <Button
                   type="button"
                   onClick={() => canNext() && setStep((s) => s + 1)}
                   disabled={!canNext()}
                   className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-40"
-                >
-                  Next <ArrowRight size={16} />
+                >{t("text_28")}<ArrowRight size={16} />
                 </Button>
               ) : (
                 <Button
