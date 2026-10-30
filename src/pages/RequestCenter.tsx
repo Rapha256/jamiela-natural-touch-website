@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { isHairProduct } from "@/lib/hair-products";
 
 const RequestCenter = () => {
   const { toast } = useToast();
   const [productList, setProductList] = useState<string[]>([]);
   const [form, setForm] = useState({
-    product: "",
+    product: new URLSearchParams(window.location.search).get("product") || "",
     quantity: 1,
     fullName: "",
     country: "",
@@ -18,8 +19,8 @@ const RequestCenter = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const { data } = await supabase.from("products").select("name").order("created_at");
-      setProductList((data || []).map((p: any) => p.name));
+      const { data } = await supabase.from("products").select("name,category").order("created_at");
+      setProductList((data || []).filter(isHairProduct).map(p => p.name));
     };
     fetchProducts();
   }, []);

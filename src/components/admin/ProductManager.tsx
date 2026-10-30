@@ -2,6 +2,8 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Pencil, Trash2, Upload, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { hairCategories, isHairProduct, productDescription } from "@/lib/hair-products";
 
 interface Product {
   id: string;
@@ -27,7 +29,7 @@ const ProductManager = ({ products, onRefresh }: Props) => {
   const [uploading, setUploading] = useState(false);
 
   const openNew = () => { setEditing({ ...emptyProduct }); setIsNew(true); };
-  const openEdit = (p: Product) => { setEditing({ ...p }); setIsNew(false); };
+  const openEdit = (p: Product) => { setEditing({ ...p, description: productDescription(p) }); setIsNew(false); };
   const close = () => { setEditing(null); setIsNew(false); };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,6 +60,9 @@ const ProductManager = ({ products, onRefresh }: Props) => {
       toast({ title: "Name and price are required", variant: "destructive" });
       return;
     }
+    if (!isHairProduct({ name: editing.name, category: editing.category || "Hair Care" })) {
+      toast({ title: "Only hair-care products can be added", variant: "destructive" }); return;
+    }
     if (isNew) {
       const { error } = await supabase.from("products").insert({
         name: editing.name,
@@ -70,6 +75,7 @@ const ProductManager = ({ products, onRefresh }: Props) => {
       if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
       toast({ title: "Product added" });
     } else {
+      if (!editing.id) return;
       const { error } = await supabase.from("products").update({
         name: editing.name,
         category: editing.category,
@@ -77,7 +83,7 @@ const ProductManager = ({ products, onRefresh }: Props) => {
         description: editing.description,
         image_url: editing.image_url,
         in_stock: editing.in_stock,
-      }).eq("id", editing.id!);
+      }).eq("id", editing.id);
       if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
       toast({ title: "Product updated" });
     }
@@ -103,7 +109,7 @@ const ProductManager = ({ products, onRefresh }: Props) => {
 
       {/* Modal */}
       {editing && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-foreground/50 z-50 flex items-center justify-center p-4">
           <div className="bg-card rounded-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-heading text-lg font-semibold">{isNew ? "Add Product" : "Edit Product"}</h3>
@@ -117,21 +123,18 @@ const ProductManager = ({ products, onRefresh }: Props) => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Category</label>
-                <select value={editing.category || "Hair Care"} onChange={e => setEditing({ ...editing, category: e.target.value })}
-                  className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm">
-                  <option>Hair Care</option>
-                  <option>Body Care</option>
-                </select>
+                <input aria-label="Category" list="hair-categories" value={editing.category || "Hair Care"} onChange={e => setEditing({ ...editing, category: e.target.value })} className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" />
+                <datalist id="hair-categories">{[...new Set([...hairCategories, ...products.filter(isHairProduct).map(p => p.category)])].map(category => <option key={category} value={category}/>)}</datalist>
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Price *</label>
                 <input value={editing.price || ""} onChange={e => setEditing({ ...editing, price: e.target.value })}
-                  className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" placeholder="D450" />
+                  className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" placeholder="$15.00 USD" />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Description</label>
+                <label className="block text-sm font-medium mb-1">Description, Ingredients &amp; How to Use</label>
                 <textarea value={editing.description || ""} onChange={e => setEditing({ ...editing, description: e.target.value })}
-                  className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" rows={3} />
+                  className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" rows={10} />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Product Image / Video</label>
@@ -175,7 +178,7 @@ const ProductManager = ({ products, onRefresh }: Props) => {
             </tr>
           </thead>
           <tbody>
-            {products.map(p => (
+            {products.filter(isHairProduct).map(p => (
               <tr key={p.id} className="border-t border-border">
                 <td className="p-3">
                   {p.image_url ? (

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { isHairProduct, productDescription } from "@/lib/hair-products";
+import { Button } from "@/components/ui/button";
 
-const categories = ["All", "Hair Care", "Body Care"];
 
 const Shop = () => {
   const [filter, setFilter] = useState("All");
@@ -12,13 +13,14 @@ const Shop = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const { data } = await supabase.from("products").select("*").order("created_at");
-      setProducts(data || []);
+      setProducts((data || []).filter(isHairProduct));
       setLoading(false);
     };
     fetchProducts();
   }, []);
 
   const filtered = filter === "All" ? products : products.filter((p) => p.category === filter);
+  const categories = ["All", ...new Set(products.map(p => p.category))];
 
   return (
     <div>
@@ -31,9 +33,9 @@ const Shop = () => {
 
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="flex justify-center gap-3 mb-12">
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
             {categories.map((cat) => (
-              <button
+              <Button
                 key={cat}
                 onClick={() => setFilter(cat)}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
@@ -41,7 +43,7 @@ const Shop = () => {
                 }`}
               >
                 {cat}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -51,27 +53,27 @@ const Shop = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {filtered.map((product) => (
                 <div key={product.id} className="group bg-card rounded-xl overflow-hidden shadow-botanical hover:shadow-lg transition-shadow">
-                  <div className="aspect-square overflow-hidden bg-muted relative">
-                    <img
-                      src={product.image_url || "/placeholder.svg"}
+                  <Link to={`/shop/${product.id}`} className="block aspect-square overflow-hidden bg-muted relative" aria-label={`View ${product.name}`}>
+                    {product.image_url && <img
+                      src={product.image_url}
                       alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
-                    />
+                    />}
                     {product.in_stock ? (
                       <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-xs px-3 py-1 rounded-full">In Stock</span>
                     ) : (
                       <span className="absolute top-3 left-3 bg-accent text-accent-foreground text-xs px-3 py-1 rounded-full">Out of Stock</span>
                     )}
-                  </div>
+                  </Link>
                   <div className="p-5">
                     <span className="text-xs font-medium text-primary uppercase tracking-wider">{product.category}</span>
-                    <h3 className="font-heading text-xl font-semibold mt-1">{product.name}</h3>
-                    <p className="text-sm text-muted-foreground mt-2">{product.description}</p>
+                    <h3 className="font-heading text-xl font-semibold mt-1"><Link to={`/shop/${product.id}`}>{product.name}</Link></h3>
+                    <p className="text-sm text-muted-foreground mt-2 line-clamp-3">{productDescription(product)}</p>
                     <p className="text-primary font-bold text-lg mt-3">{product.price}</p>
                     <div className="flex gap-2 mt-4">
                       <Link
-                        to="/request"
+                        to={`/request?product=${encodeURIComponent(product.name)}`}
                         className="flex-1 bg-primary text-primary-foreground text-center py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
                       >
                         Request
