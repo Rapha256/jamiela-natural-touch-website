@@ -102,9 +102,9 @@ const ProductManager = ({ products, onRefresh }: Props) => {
     <div className="bg-card rounded-xl shadow-botanical overflow-hidden">
       <div className="p-4 border-b border-border flex items-center justify-between">
         <h2 className="font-heading text-lg font-semibold">Products ({products.length})</h2>
-        <button onClick={openNew} className="flex items-center gap-1 bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium">
+        <Button onClick={openNew} className="flex items-center gap-1 bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium">
           <Plus size={16} /> Add Product
-        </button>
+        </Button>
       </div>
 
       {/* Modal */}
@@ -113,7 +113,7 @@ const ProductManager = ({ products, onRefresh }: Props) => {
           <div className="bg-card rounded-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-heading text-lg font-semibold">{isNew ? "Add Product" : "Edit Product"}</h3>
-              <button onClick={close}><X size={20} /></button>
+              <Button onClick={close}><X size={20} /></Button>
             </div>
             <div className="space-y-4">
               <div>
@@ -156,9 +156,9 @@ const ProductManager = ({ products, onRefresh }: Props) => {
                   className="rounded" />
                 <label className="text-sm">In Stock</label>
               </div>
-              <button onClick={save} className="w-full bg-primary text-primary-foreground py-3 rounded-full font-medium">
+              <Button onClick={save} className="w-full bg-primary text-primary-foreground py-3 rounded-full font-medium">
                 {isNew ? "Add Product" : "Save Changes"}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -201,8 +201,8 @@ const ProductManager = ({ products, onRefresh }: Props) => {
                 </td>
                 <td className="p-3">
                   <div className="flex gap-1">
-                    <button onClick={() => openEdit(p)} className="p-1.5 hover:bg-muted rounded"><Pencil size={14} /></button>
-                    <button onClick={() => remove(p.id)} className="p-1.5 hover:bg-accent/10 rounded text-accent"><Trash2 size={14} /></button>
+                    <Button onClick={() => openEdit(p)} className="p-1.5 hover:bg-muted rounded"><Pencil size={14} /></Button>
+                    <Button onClick={() => remove(p.id)} className="p-1.5 hover:bg-accent/10 rounded text-accent"><Trash2 size={14} /></Button>
                   </div>
                 </td>
               </tr>

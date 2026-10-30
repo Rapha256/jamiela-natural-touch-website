@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 import { ArrowRight, Leaf, Truck, FlaskConical, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { isHairProduct } from "@/lib/hair-products";
 
 const Index = () => {
   const { t, list } = usePageCopy("home");
@@ -14,7 +15,7 @@ const Index = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const { data } = await supabase.from("products").select("*").order("created_at").limit(6);
-      setProducts(data || []);
+      setProducts((data || []).filter(isHairProduct));
     };
     fetchProducts();
   }, []);
