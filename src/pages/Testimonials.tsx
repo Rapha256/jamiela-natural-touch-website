@@ -1,8 +1,11 @@
+import { Button } from "@/components/ui/button";
+import { usePageCopy } from "@/hooks/use-page-copy";
 import { useState, useEffect } from "react";
 import { Star, Play, X, Image as ImageIcon, Video } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const Testimonials = () => {
+  const { t, list } = usePageCopy("reviews");
   const [testimonials, setTestimonials] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [lightbox, setLightbox] = useState<{ type: "image" | "video"; url: string } | null>(null);
@@ -16,21 +19,19 @@ const Testimonials = () => {
     fetch();
   }, []);
 
-  const isVideo = (url: string) => /\.(mp4|mov|mpeg|avi|webm|mkv|m4v)$/i.test(url);
-
   return (
     <div>
       <section className="py-20 bg-secondary">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">What Our Customers Say</h1>
-          <p className="text-muted-foreground">Real reviews from real people who love our products</p>
+          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">{t("text_3")}</h1>
+          <p className="text-muted-foreground">{t("text_4")}</p>
         </div>
       </section>
 
       <section className="py-16">
         <div className="container mx-auto px-4 max-w-5xl">
           {loading ? (
-            <p className="text-center text-muted-foreground">Loading...</p>
+            <p className="text-center text-muted-foreground">{t("text_5")}</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {testimonials.map((t) => (
@@ -48,7 +49,7 @@ const Testimonials = () => {
                         <div className="relative aspect-[4/3] bg-muted">
                           <video
                             src={t.video_url}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                             muted
                             preload="metadata"
                           />
@@ -63,7 +64,7 @@ const Testimonials = () => {
                           <img
                             src={t.image_url}
                             alt={`Review by ${t.name}`}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
                       ) : null}
@@ -93,9 +94,9 @@ const Testimonials = () => {
       {/* Lightbox */}
       {lightbox && (
         <div className="fixed inset-0 bg-foreground/80 z-50 flex items-center justify-center p-4" onClick={() => setLightbox(null)}>
-          <button className="absolute top-4 right-4 text-background hover:text-background/80 z-10" onClick={() => setLightbox(null)}>
+          <Button className="absolute top-4 right-4 text-background hover:text-background/80 z-10" onClick={() => setLightbox(null)}>
             <X size={32} />
-          </button>
+          </Button>
           <div className="max-w-3xl max-h-[85vh] w-full" onClick={(e) => e.stopPropagation()}>
             {lightbox.type === "video" ? (
               <video src={lightbox.url} controls autoPlay className="w-full max-h-[85vh] rounded-lg" />

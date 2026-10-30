@@ -21,6 +21,7 @@ import FAQ from "./pages/FAQ";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Returns from "./pages/Returns";
+import ProductDetail from "./pages/ProductDetail";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@ const App = () => (
                   <Route path="/" element={<Index />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/shop" element={<Shop />} />
+                  <Route path="/shop/:id" element={<ProductDetail />} />
                   <Route path="/request" element={<RequestCenter />} />
                   <Route path="/testimonials" element={<Testimonials />} />
                   <Route path="/delivery" element={<Delivery />} />
