@@ -6,7 +6,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Testimonials = () => {
   const { t, list } = usePageCopy("reviews");
-  const [testimonials, setTestimonials] = useState<any[]>{t("text_1")}<{ type: "image" | "video"; url: string } | null>(null);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [lightbox, setLightbox] = useState<{ type: "image" | "video"; url: string } | null>(null);
 
   useEffect(() => {
     const fetch = async () => {
@@ -17,7 +19,8 @@ const Testimonials = () => {
     fetch();
   }, []);
 
-  const isVideo = (url: string) =>{t("text_2")}<div>
+  return (
+    <div>
       <section className="py-20 bg-secondary">
         <div className="container mx-auto px-4 text-center">
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">{t("text_3")}</h1>
@@ -55,7 +58,9 @@ const Testimonials = () => {
                               <Play size={24} className="text-primary-foreground ml-1" />
                             </div>
                           </div>
-                        </div>{t("text_6")}<div className="aspect-[4/3] bg-muted">
+                        </div>
+                      ) : t.image_url ? (
+                        <div className="aspect-[4/3] bg-muted">
                           <img
                             src={t.image_url}
                             alt={`Review by ${t.name}`}

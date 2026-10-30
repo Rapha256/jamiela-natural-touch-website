@@ -53,7 +53,14 @@ const Consultation = () => {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const [goals, setGoals] = useState<string[]>{t("text_1")}<string[]>{t("text_2")}<string[]>([]);
+  const [goals, setGoals] = useState<string[]>([]);
+  const [concerns, setConcerns] = useState<string[]>([]);
+  const [hairType, setHairType] = useState("");
+  const [thickness, setThickness] = useState("");
+  const [washFreq, setWashFreq] = useState("");
+  const [protective, setProtective] = useState("");
+  const [dryness, setDryness] = useState("");
+  const [currentProducts, setCurrentProducts] = useState<string[]>([]);
   const [routineNotes, setRoutineNotes] = useState("");
   const [desired, setDesired] = useState("");
   const [additional, setAdditional] = useState("");
