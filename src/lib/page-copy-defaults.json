@@ -60,8 +60,6 @@
     "value_5_description": "We want you to understand what you use and why it belongs in your routine."
   },
   "consultation": {
-    "text_1": "([]); const [concerns, setConcerns] = useState",
-    "text_2": "([]); const [hairType, setHairType] = useState(\"\"); const [thickness, setThickness] = useState(\"\"); const [washFreq, setWashFreq] = useState(\"\"); const [protective, setProtective] = useState(\"\"); const [dryness, setDryness] = useState(\"\"); const [currentProducts, setCurrentProducts] = useState",
     "text_3": "Your hair story has been received.",
     "text_4": "Every head of hair has different needs, and that's exactly why we don't believe in one routine for everyone. We'll review your answers and create a JNT routine based on your goals and what your hair needs.",
     "text_5": "Hair Consultation",
@@ -188,12 +186,9 @@
     ]
   },
   "reviews": {
-    "text_1": "([]); const [loading, setLoading] = useState(true); const [lightbox, setLightbox] = useState",
-    "text_2": "/\\.(mp4|mov|mpeg|avi|webm|mkv|m4v)$/i.test(url); return (",
     "text_3": "What Our Customers Say",
     "text_4": "Real reviews from real people who love our products",
-    "text_5": "Loading...",
-    "text_6": ") : t.image_url ? ("
+    "text_5": "Loading..."
   },
   "contact": {
     "text_1": "Get in Touch",
