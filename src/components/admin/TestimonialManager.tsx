@@ -99,7 +99,7 @@ const TestimonialManager = ({ testimonials, onRefresh }: Props) => {
           <div className="bg-card rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-heading text-lg font-semibold">{editing ? "Edit Testimonial" : "Add Testimonial"}</h3>
-              <button onClick={() => { setAdding(false); setMediaFile(null); }}><X size={20} /></button>
+              <Button onClick={() => { setAdding(false); setMediaFile(null); }}><X size={20} /></Button>
             </div>
             <div className="space-y-3">
               <input placeholder="Customer name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })}
@@ -129,14 +129,14 @@ const TestimonialManager = ({ testimonials, onRefresh }: Props) => {
                   />
                 </label>
                 {mediaFile && (
-                  <button onClick={() => setMediaFile(null)} className="text-xs text-destructive mt-1">Remove file</button>
+                  <Button onClick={() => setMediaFile(null)} className="text-xs text-destructive mt-1">Remove file</Button>
                 )}
               </div>
 
-              <button onClick={add} disabled={uploading}
+              <Button onClick={add} disabled={uploading}
                 className="w-full bg-primary text-primary-foreground py-3 rounded-full font-medium disabled:opacity-50">
                 {uploading ? "Saving..." : editing ? "Save Changes" : "Add Testimonial"}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
