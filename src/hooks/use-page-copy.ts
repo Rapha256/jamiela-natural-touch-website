@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { mergePageCopy, type PageId } from "@/lib/page-copy";
@@ -12,7 +13,8 @@ export function usePageCopy(page: PageId) {
     },
     staleTime: 0,
   });
-  const copy = query.data ?? mergePageCopy(page, null);
+  const fallback = useMemo(() => mergePageCopy(page, null), [page]);
+  const copy = query.data ?? fallback;
   return {
     ...query,
     copy,
