@@ -50,7 +50,7 @@ export default function ContentManager() {
     </select>
     {isLoading ? <p>Loading…</p> : isError ? <p className="text-destructive">Content could not be loaded. Please try again.</p> : <div className="space-y-5">
       {Object.entries(pageDefaults[page]).map(([key, fallback]) => <div key={`${page}-${key}`}>
-        <label htmlFor={`copy-${key}`} className="block text-sm font-medium mb-2 break-words">{key === "hero_image" ? "Homepage Banner" : key === "hero_title" ? "Banner Description" : key === "whatsapp_url" ? "WhatsApp Link" : key.startsWith("text_") ? String(fallback).slice(0, 100) : key.replaceAll("_", " ")}</label>
+        <label htmlFor={`copy-${key}`} className="block text-sm font-medium mb-2 break-words">{key === "hero_image" ? "Homepage Banner" : key === "hero_title" ? "Banner Description" : key === "whatsapp_url" ? "WhatsApp Link" : key.startsWith("text_") ? String(fallback).slice(0, 100) : key.replace(/_/g, " ")}</label>
         {key === "hero_image" ? <div>
           <img src={String(draft[key] || fallback)} alt="Homepage banner" className="w-full aspect-video object-contain bg-muted mb-3" />
           <Button asChild variant="outline"><label><Upload size={16}/>{uploading ? "Uploading…" : "Replace Banner"}<input aria-label="Replace Banner" type="file" accept="image/*" className="hidden" disabled={uploading} onChange={e => upload(e.target.files?.[0])}/></label></Button>
