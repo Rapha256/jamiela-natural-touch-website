@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Trash2, X, Upload, Image, Video } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Upload, Image, Video } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Testimonial {
   id: string;
@@ -21,6 +22,7 @@ interface Props {
 const TestimonialManager = ({ testimonials, onRefresh }: Props) => {
   const { toast } = useToast();
   const [adding, setAdding] = useState(false);
+  const [editing, setEditing] = useState<Testimonial | null>(null);
   const [form, setForm] = useState({ name: "", text: "", rating: 5, country: "" });
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -46,21 +48,25 @@ const TestimonialManager = ({ testimonials, onRefresh }: Props) => {
     
     setUploading(true);
     try {
-      let mediaUrls = { image_url: null as string | null, video_url: null as string | null };
+      let mediaUrls = { image_url: editing?.image_url ?? null, video_url: editing?.video_url ?? null };
       if (mediaFile) {
         mediaUrls = await uploadMedia(mediaFile);
       }
       
-      const { error } = await supabase.from("testimonials").insert({
+      const values = {
         name: form.name,
         text: form.text,
         rating: form.rating,
         country: form.country || null,
         image_url: mediaUrls.image_url,
         video_url: mediaUrls.video_url,
-      });
+      };
+      const { error } = editing
+        ? await supabase.from("testimonials").update(values).eq("id", editing.id)
+        : await supabase.from("testimonials").insert(values);
       if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
-      toast({ title: "Testimonial added" });
+      toast({ title: editing ? "Testimonial updated" : "Testimonial added" });
+      setEditing(null);
       setForm({ name: "", text: "", rating: 5, country: "" });
       setMediaFile(null);
       setAdding(false);
@@ -83,16 +89,16 @@ const TestimonialManager = ({ testimonials, onRefresh }: Props) => {
     <div className="bg-card rounded-xl shadow-botanical overflow-hidden">
       <div className="p-4 border-b border-border flex items-center justify-between">
         <h2 className="font-heading text-lg font-semibold">Testimonials ({testimonials.length})</h2>
-        <button onClick={() => setAdding(true)} className="flex items-center gap-1 bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium">
+        <Button onClick={() => { setEditing(null); setForm({ name: "", text: "", rating: 5, country: "" }); setAdding(true); }} className="flex items-center gap-1 bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium">
           <Plus size={16} /> Add
-        </button>
+        </Button>
       </div>
 
       {adding && (
         <div className="fixed inset-0 bg-foreground/50 z-50 flex items-center justify-center p-4">
           <div className="bg-card rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="font-heading text-lg font-semibold">Add Testimonial</h3>
+              <h3 className="font-heading text-lg font-semibold">{editing ? "Edit Testimonial" : "Add Testimonial"}</h3>
               <button onClick={() => { setAdding(false); setMediaFile(null); }}><X size={20} /></button>
             </div>
             <div className="space-y-3">
@@ -129,7 +135,7 @@ const TestimonialManager = ({ testimonials, onRefresh }: Props) => {
 
               <button onClick={add} disabled={uploading}
                 className="w-full bg-primary text-primary-foreground py-3 rounded-full font-medium disabled:opacity-50">
-                {uploading ? "Uploading..." : "Add Testimonial"}
+                {uploading ? "Saving..." : editing ? "Save Changes" : "Add Testimonial"}
               </button>
             </div>
           </div>
@@ -157,7 +163,8 @@ const TestimonialManager = ({ testimonials, onRefresh }: Props) => {
               {t.video_url && <span className="text-xs text-primary">🎥 Video</span>}
               {t.image_url && <span className="text-xs text-primary">📷 Photo</span>}
             </div>
-            <button onClick={() => remove(t.id)} className="p-1.5 hover:bg-accent/10 rounded text-accent flex-shrink-0"><Trash2 size={14} /></button>
+            <Button variant="ghost" size="icon" aria-label={`Edit ${t.name}`} onClick={() => { setEditing(t); setForm({ name: t.name, text: t.text, rating: t.rating, country: t.country || "" }); setMediaFile(null); setAdding(true); }}><Pencil size={14}/></Button>
+            <Button variant="ghost" size="icon" aria-label={`Delete ${t.name}`} onClick={() => remove(t.id)} className="text-accent"><Trash2 size={14} /></Button>
           </div>
         ))}
       </div>
